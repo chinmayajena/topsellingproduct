@@ -12,50 +12,50 @@ info:
 host: "xyz.tsp.io"
 basePath: "/v1"
 tags:
-- name: "topfeeds"
-  description: "Top selling product for a category"
-  externalDocs:
-    description: "Find out more"
-    url: "http://productdoc.xyz.io"
- 
+  - name: "topselling"
+    description: "Top selling product for a category"
+    externalDocs:
+      description: "Find out more"
+      url: "http://productdoc.xyz.io"
+
 schemes:
-- "https"
+  - "https"
 paths:
-  /topfeeds/category/{categoryId}:
+  /topselling/category/{categoryId}:
     get:
       tags:
-      - "topfeeds"
+        - "topselling"
       summary: " This API provides information about the top selling products in given category."
       description: "Returns a list of five products"
       operationId: "getProductsByCategoryId"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "categoryId"
-        in: "path"
-        description: "ID of category to return"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "categoryId"
+          in: "path"
+          description: "ID of category to return"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         "200":
           description: "successful operation"
           schema:
-           $ref: "#/definitions/TopFeed"
+            $ref: "#/definitions/TopFeed"
         "400":
           description: "Invalid Id supplied"
         "404":
           description: "category not found"
       security:
-      - api_key: []
-    
+        - api_key: []
+
 securityDefinitions:
   topfeed_auth:
     type: "oauth2"
     authorizationUrl: "https://login.microsoftonline.com/{tenantId}/oauth2/authorize"
     flow: "implicit"
     scopes:
-       read:products: "read your products"
+      read:products: "read your products"
   api_key:
     type: "apiKey"
     name: "api_key"
@@ -76,7 +76,7 @@ definitions:
       productList:
         type: "array"
         items:
-           $ref: "#/definitions/Product"
+          $ref: "#/definitions/Product"
 
   Product:
     type: "object"
@@ -86,7 +86,14 @@ definitions:
         format: "uuid"
       name:
         type: "string"
-        example: "doggie"
+        example: "iphone"
+      price:
+        type: "number"
+        format: "double"
+      category:
+        type: "array"
+        items:
+          $ref: "#/definitions/Category"
       photoUrls:
         type: "array"
         xml:
@@ -98,7 +105,15 @@ definitions:
         type: "string"
         description: "product status in the store"
         enum:
-        - "instock"
-        - "sold"
+          - "instock"
+          - "sold"
 
- 
+  Category:
+    type: "object"
+    properties:
+      categoryId:
+        type: "integer"
+        format: "int64"
+      categoryName:
+        type: "string"
+        example: "electronics"
