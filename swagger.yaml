@@ -81,7 +81,7 @@ definitions:
   Product:
     type: "object"
     properties:
-      productId:
+      sku:
         type: "string"
         format: "uuid"
       name:
@@ -90,7 +90,7 @@ definitions:
       price:
         type: "number"
         format: "double"
-      category:
+      categories:
         type: "array"
         items:
           $ref: "#/definitions/Category"
