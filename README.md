@@ -50,6 +50,9 @@
 
 The _Order-Mangement Service_ would get the request from UI and publish the order into Kafka. Further, it could be posted into a Relational database for managin the order details along with the Further, the _order-stream service_ would listen to the kafka topic and put the data into a S3 bucket or azure datalake.
 
+[Kafka Connect to S3](https://www.youtube.com/watch?v=_RdMCc4HGPY)
+[Kafka stream to s3 open source](https://github.com/lensesio/stream-reactor/tree/master/kafka-connect-aws-s3)
+
 The order-stream api would log into s3 as follows:
 
 ```
@@ -67,6 +70,17 @@ t6          product1    category2     -1       140.00         3
 - Object Model that covers the main entities and their interactions for the component handling the top-selling-products service requests.
 
   _A databricks workspace could be used here to do the big data aggregation to do the query to group products sold by category and write into redis cluster. The databricks provides a job scheduler or else we could schedule this notebook with Azure datafactory or airflow systems to write every hour into redis cluster_
+
+  [Databricks mount point for s3](https://docs.databricks.com/data/data-sources/aws/amazon-s3.html)
+
+Sample code for connecting databricks to s3:
+
+```
+aws_bucket_name = "<aws-bucket-name>"
+mount_name = "<mount-name>"
+dbutils.fs.mount("s3a://%s" % aws_bucket_name, "/mnt/%s" % mount_name)
+display(dbutils.fs.ls("/mnt/%s" % mount_name))
+```
 
 - Rest API design for the top-selling-products (cover resource, actions, URI params, HTTP codes etc).
 
