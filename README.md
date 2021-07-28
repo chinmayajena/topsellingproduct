@@ -34,7 +34,11 @@
 
 - Draw a high level deployment architecture (can be combined with above).
 
+  _The independent services would be dockerized and deployed through kubernetes cluster so as to provide auto scaling while we have high load._
+
 - Draw the key data flows.
+
+  _The application would be behind an application gateway with reverse proxy enabled. Azure application gateway is an example for this_
 
   ![High level design](./hld.png)
 
@@ -42,7 +46,27 @@
 
 - Object Model that covers the main entities and their interactions for the component processing sales feed every hour.
 
+#### Sales Feed Api
+
+The _Order-Mangement Service_ would get the request from UI and publish the order into Kafka. Further, it could be posted into a Relational database for managin the order details along with the Further, the _order-stream service_ would listen to the kafka topic and put the data into a S3 bucket or azure datalake.
+
+The order-stream api would log into s3 as follows:
+
+```
+timestamp   product_id  category_id    qty     total_price   customer_id
+t1          product1    category1      2       120.00         1
+t2          product1    category2      2       320.00         2
+t2          product1    category2      1       140.00         3
+t3          product2    category1      3        97.00         4
+t4          product3    category2      7        12.00         5
+t5          product4    category1      1        95.00         6
+t6          product1    category2     -1       140.00         3
+...
+```
+
 - Object Model that covers the main entities and their interactions for the component handling the top-selling-products service requests.
+
+  _A databricks workspace could be used here to do the big data aggregation to do the query to group products sold by category and write into redis cluster. The databricks provides a job scheduler or else we could schedule this notebook with Azure datafactory or airflow systems to write every hour into redis cluster_
 
 - Rest API design for the top-selling-products (cover resource, actions, URI params, HTTP codes etc).
 
