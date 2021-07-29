@@ -1,5 +1,5 @@
 const client = require("redis").createClient({
-  host: "localhost",
+  host: "redis-server",
   port: 6379,
 });
 const { promisify } = require("util");

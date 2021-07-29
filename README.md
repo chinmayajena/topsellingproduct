@@ -4,6 +4,13 @@
 
 - Expose a service which returns top selling products for a given product category.
 
+```
+This repository contains a docker compose file which spins up redis and the node app which connects to redis and provides the sample api to give the response.
+
+To start:
+docker-compose up -d
+```
+
 ### Assumptions/Constraints:
 
 - Products can be in multiple categories.
