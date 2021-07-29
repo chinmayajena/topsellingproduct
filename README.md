@@ -82,6 +82,8 @@ dbutils.fs.mount("s3a://%s" % aws_bucket_name, "/mnt/%s" % mount_name)
 display(dbutils.fs.ls("/mnt/%s" % mount_name))
 ```
 
+#### Sample Code to Create the Ranking of the Products in each category
+
 ```
 %python
 
@@ -112,6 +114,9 @@ df4.show()
 
 ```
 
+#### Sample Code to connect to Redis and write the key value data from Spark
+
+[Databricks to Redis](https://docs.databricks.com/data/data-sources/redis.html)
 
 - Rest API design for the top-selling-products (cover resource, actions, URI params, HTTP codes etc).
 
@@ -124,6 +129,8 @@ df4.show()
 Additional Questions to answer:
 
 - How do you scale the system for the specified load characteristics?
+
+[Load Testing with Artillery](https://github.com/chinmayajena/artillery-load-testing)
 
 - How do you make sure the system can perform at <500 ms latency for 99th %tile of requests.
 
