@@ -82,6 +82,37 @@ dbutils.fs.mount("s3a://%s" % aws_bucket_name, "/mnt/%s" % mount_name)
 display(dbutils.fs.ls("/mnt/%s" % mount_name))
 ```
 
+```
+%python
+
+dict2 = [{"product_id":123, "category_id":47326, "qty":5},{"product_id":1234, "category_id":47326, "qty":5}, {"product_id":123, "category_id":47326, "qty":10}, {"product_id":22, "category_id":47325, "qty":10}, {"product_id":12, "category_id":474326, "qty":10}, {"product_id":12, "category_id":473326, "qty":40}, {"product_id":12, "category_id":47326, "qty":10}]
+
+rdd2=sc.parallelize(dict2)
+df2=rdd2.toDF()
+print("Printing the dataframe df1")
+df2.show()
+```
+
+```
+%python
+
+import pyspark.sql.functions as F
+
+@F.pandas_udf('string', F.PandasUDFType.GROUPED_AGG)
+def collect_list(id):
+    return ', '.join(str(id))
+
+df2.createOrReplaceTempView("Sales")
+df3 = spark.sql("select category_id, product_id, qty, dense_rank() over (partition by category_id order by qty desc) as rank from (select category_id, product_id, sum(qty) as qty from Sales group by category_id, product_id) mytable group by category_id, product_id, qty ")
+
+df3.show()
+df4 = df3.groupBy("category_id").agg(collect_list("product_id").alias("product_id"))
+
+df4.show()
+
+```
+
+
 - Rest API design for the top-selling-products (cover resource, actions, URI params, HTTP codes etc).
 
 - DB Schema details (if any).
